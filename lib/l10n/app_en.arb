@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "appTitle": "Learning Academy",
+  "tagline": "Choose an adventure and learn while playing!",
+  "mathematics": "Mathematics",
+  "mathematicsSubtitle": "Numbers, sums and challenges",
+  "romanNumbers": "Roman Numbers",
+  "romanNumbersSubtitle": "Discover I, V, X and more",
+  "clock": "Clock",
+  "clockSubtitle": "Learn to tell the time",
+  "comingSoon": "Coming Soon",
+  "comingSoonSubtitle": "New adventures are on the way",
+  "adSpace": "Ad space",
+  "selectLanguage": "Choose language",
+  "back": "Back",
+  "featureReady": "This learning adventure is ready for its next stage."
+}

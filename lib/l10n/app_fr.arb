@@ -1,0 +1,17 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Learning Academy",
+  "tagline": "Choisis une aventure et apprends en jouant !",
+  "mathematics": "Mathématiques",
+  "mathematicsSubtitle": "Nombres, additions et défis",
+  "romanNumbers": "Chiffres romains",
+  "romanNumbersSubtitle": "Découvre I, V, X et bien plus",
+  "clock": "L'horloge",
+  "clockSubtitle": "Apprends à lire l'heure",
+  "comingSoon": "Bientôt disponible",
+  "comingSoonSubtitle": "De nouvelles aventures arrivent",
+  "adSpace": "Espace publicitaire",
+  "selectLanguage": "Choisir la langue",
+  "back": "Retour",
+  "featureReady": "Cette aventure éducative est prête pour la prochaine étape."
+}
