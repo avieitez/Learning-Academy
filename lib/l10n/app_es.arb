@@ -13,5 +13,18 @@
   "adSpace": "Espacio publicitario",
   "selectLanguage": "Seleccionar idioma",
   "back": "Volver",
-  "featureReady": "Esta aventura educativa está lista para su siguiente etapa."
+  "featureReady": "Esta aventura educativa está lista para su siguiente etapa.",
+  "chooseOperation": "Elige una operación",
+  "addition": "Sumar",
+  "additionSubtitle": "Aprende a sumar jugando",
+  "subtraction": "Restar",
+  "subtractionSubtitle": "Encuentra las diferencias",
+  "multiplication": "Multiplicar",
+  "multiplicationSubtitle": "Desafía tu mente",
+  "division": "Dividir",
+  "divisionSubtitle": "Divide y conquista",
+  "levelMap": "Mapa de niveles",
+  "level": "Nivel",
+  "play": "Jugar",
+  "exercisesComingNext": "La sesión de ejercicios es la siguiente etapa de desarrollo."
 }

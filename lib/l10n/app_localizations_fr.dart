@@ -50,4 +50,44 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get featureReady =>
       'Cette aventure éducative est prête pour la prochaine étape.';
+
+  @override
+  String get chooseOperation => 'Choisis une opération';
+
+  @override
+  String get addition => 'Additionner';
+
+  @override
+  String get additionSubtitle => 'Apprends à additionner en jouant';
+
+  @override
+  String get subtraction => 'Soustraire';
+
+  @override
+  String get subtractionSubtitle => 'Trouve les différences';
+
+  @override
+  String get multiplication => 'Multiplier';
+
+  @override
+  String get multiplicationSubtitle => 'Défie ton esprit';
+
+  @override
+  String get division => 'Diviser';
+
+  @override
+  String get divisionSubtitle => 'Divise et conquiers';
+
+  @override
+  String get levelMap => 'Carte des niveaux';
+
+  @override
+  String get level => 'Niveau';
+
+  @override
+  String get play => 'Jouer';
+
+  @override
+  String get exercisesComingNext =>
+      'La session d\'exercices est la prochaine étape du développement.';
 }

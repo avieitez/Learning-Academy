@@ -13,5 +13,18 @@
   "adSpace": "Espace publicitaire",
   "selectLanguage": "Choisir la langue",
   "back": "Retour",
-  "featureReady": "Cette aventure éducative est prête pour la prochaine étape."
+  "featureReady": "Cette aventure éducative est prête pour la prochaine étape.",
+  "chooseOperation": "Choisis une opération",
+  "addition": "Additionner",
+  "additionSubtitle": "Apprends à additionner en jouant",
+  "subtraction": "Soustraire",
+  "subtractionSubtitle": "Trouve les différences",
+  "multiplication": "Multiplier",
+  "multiplicationSubtitle": "Défie ton esprit",
+  "division": "Diviser",
+  "divisionSubtitle": "Divise et conquiers",
+  "levelMap": "Carte des niveaux",
+  "level": "Niveau",
+  "play": "Jouer",
+  "exercisesComingNext": "La session d'exercices est la prochaine étape du développement."
 }

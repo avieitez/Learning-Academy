@@ -50,4 +50,44 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get featureReady =>
       'This learning adventure is ready for its next stage.';
+
+  @override
+  String get chooseOperation => 'Choose an operation';
+
+  @override
+  String get addition => 'Addition';
+
+  @override
+  String get additionSubtitle => 'Learn to add while playing';
+
+  @override
+  String get subtraction => 'Subtraction';
+
+  @override
+  String get subtractionSubtitle => 'Find the differences';
+
+  @override
+  String get multiplication => 'Multiplication';
+
+  @override
+  String get multiplicationSubtitle => 'Challenge your mind';
+
+  @override
+  String get division => 'Division';
+
+  @override
+  String get divisionSubtitle => 'Divide and conquer';
+
+  @override
+  String get levelMap => 'Level Map';
+
+  @override
+  String get level => 'Level';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get exercisesComingNext =>
+      'The exercise session is the next development stage.';
 }

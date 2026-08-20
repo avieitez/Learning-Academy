@@ -32,7 +32,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(card);
     await tester.pumpAndSettle();
-    expect(find.text('Mathematics'), findsWidgets);
+    expect(find.text('Choose an operation'), findsOneWidget);
+    expect(find.byKey(const ValueKey('addition-operation')), findsOneWidget);
   });
 
   testWidgets('language selector updates widget text from ARB', (tester) async {
@@ -47,5 +48,32 @@ void main() {
     expect(find.text('Números romanos'), findsOneWidget);
     expect(find.text('El reloj'), findsOneWidget);
     expect(find.text('Espacio publicitario'), findsOneWidget);
+  });
+
+  testWidgets('addition opens a twelve-level map', (tester) async {
+    await tester.pumpWidget(const LearningAcademyApp());
+    await tester.pumpAndSettle();
+    final mathCard = find.byKey(const ValueKey('mathematics-card'));
+    await tester.scrollUntilVisible(
+      mathCard,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(mathCard);
+    await tester.pumpAndSettle();
+    final addition = find.byKey(const ValueKey('addition-operation'));
+    await tester.scrollUntilVisible(
+      addition,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(addition);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Level Map'), findsOneWidget);
+    expect(find.byKey(const ValueKey('level-1')), findsOneWidget);
+    expect(find.byKey(const ValueKey('play-level')), findsOneWidget);
   });
 }

@@ -183,6 +183,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This learning adventure is ready for its next stage.'**
   String get featureReady;
+
+  /// No description provided for @chooseOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an operation'**
+  String get chooseOperation;
+
+  /// No description provided for @addition.
+  ///
+  /// In en, this message translates to:
+  /// **'Addition'**
+  String get addition;
+
+  /// No description provided for @additionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn to add while playing'**
+  String get additionSubtitle;
+
+  /// No description provided for @subtraction.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtraction'**
+  String get subtraction;
+
+  /// No description provided for @subtractionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the differences'**
+  String get subtractionSubtitle;
+
+  /// No description provided for @multiplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiplication'**
+  String get multiplication;
+
+  /// No description provided for @multiplicationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge your mind'**
+  String get multiplicationSubtitle;
+
+  /// No description provided for @division.
+  ///
+  /// In en, this message translates to:
+  /// **'Division'**
+  String get division;
+
+  /// No description provided for @divisionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Divide and conquer'**
+  String get divisionSubtitle;
+
+  /// No description provided for @levelMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Level Map'**
+  String get levelMap;
+
+  /// No description provided for @level.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get level;
+
+  /// No description provided for @play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get play;
+
+  /// No description provided for @exercisesComingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'The exercise session is the next development stage.'**
+  String get exercisesComingNext;
 }
 
 class _AppLocalizationsDelegate
