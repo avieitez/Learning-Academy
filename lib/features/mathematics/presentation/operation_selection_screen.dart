@@ -27,7 +27,7 @@ class OperationSelectionScreen extends StatelessWidget {
             slivers: [
               SliverToBoxAdapter(child: _Header(title: l10n.chooseOperation)),
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 36, 20, 36),
+                padding: const EdgeInsets.fromLTRB(20, 22, 20, 36),
                 sliver: SliverGrid.builder(
                   itemCount: MathematicsCatalog.operations.length,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -85,47 +85,50 @@ class _Header extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) => Stack(
-    alignment: Alignment.bottomCenter,
+  Widget build(BuildContext context) => Column(
     children: [
-      AspectRatio(
-        aspectRatio: 1024 / 465,
-        child: Image.asset(
-          'assets/images/common/home_characters.png',
-          fit: BoxFit.cover,
-        ),
-      ),
-      Positioned(
-        top: 8,
-        left: 8,
-        child: IconButton.filledTonal(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),
-      ),
-      Transform.translate(
-        offset: const Offset(0, 18),
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 42),
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFFB229), Color(0xFFF27C12)],
+      Stack(
+        children: [
+          AspectRatio(
+            key: const ValueKey('operation-characters'),
+            aspectRatio: 1024 / 465,
+            child: Image.asset(
+              'assets/images/common/home_characters.png',
+              fit: BoxFit.cover,
             ),
-            borderRadius: BorderRadius.circular(26),
-            border: Border.all(color: Colors.white, width: 5),
-            boxShadow: const [
-              BoxShadow(color: Color(0x55000000), offset: Offset(0, 6)),
-            ],
           ),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
+          Positioned(
+            top: 10,
+            left: 10,
+            child: IconButton.filledTonal(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_rounded),
             ),
+          ),
+        ],
+      ),
+      Container(
+        key: const ValueKey('operation-title'),
+        width: double.infinity,
+        margin: const EdgeInsets.fromLTRB(32, 14, 32, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFFB229), Color(0xFFF27C12)],
+          ),
+          borderRadius: BorderRadius.circular(26),
+          border: Border.all(color: Colors.white, width: 5),
+          boxShadow: const [
+            BoxShadow(color: Color(0x55000000), offset: Offset(0, 6)),
+          ],
+        ),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ),

@@ -34,6 +34,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Choose an operation'), findsOneWidget);
     expect(find.byKey(const ValueKey('addition-operation')), findsOneWidget);
+
+    final characters = tester.getRect(
+      find.byKey(const ValueKey('operation-characters')),
+    );
+    final title = tester.getRect(find.byKey(const ValueKey('operation-title')));
+    expect(title.top, greaterThanOrEqualTo(characters.bottom));
   });
 
   testWidgets('language selector updates widget text from ARB', (tester) async {
