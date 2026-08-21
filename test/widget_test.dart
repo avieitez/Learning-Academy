@@ -103,4 +103,29 @@ void main() {
     expect(find.byKey(const ValueKey('level-1')), findsOneWidget);
     expect(find.byKey(const ValueKey('play-level')), findsOneWidget);
   });
+
+  testWidgets('settings has no overflow in Spanish on a narrow phone', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const LearningAcademyApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('settings-button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Español'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Acerca de Learning Academy'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Acerca de Learning Academy'), findsOneWidget);
+  });
 }

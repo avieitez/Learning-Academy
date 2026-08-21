@@ -61,7 +61,7 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisCount: 3,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
-                  childAspectRatio: 1.05,
+                  childAspectRatio: .9,
                 ),
                 itemBuilder: (context, index) {
                   final mascot = Mascot.values[index];
@@ -147,10 +147,18 @@ class _SettingsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, color: AppColors.blue),
             const SizedBox(width: 10),
-            Text(title, style: Theme.of(context).textTheme.titleLarge),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 16),
