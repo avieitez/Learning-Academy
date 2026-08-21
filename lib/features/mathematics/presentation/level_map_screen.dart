@@ -26,6 +26,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
     final unlockedLevel = AppPreferencesScope.of(
       context,
     ).value.unlockedLevel('mathematics', widget.operation.name);
+    final mascot = AppPreferencesScope.of(context).value.mascot;
     final levels = MathematicsCatalog.levels(currentLevel: unlockedLevel);
     _selectedLevel ??= unlockedLevel;
     return Scaffold(
@@ -54,6 +55,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                               painter: const LevelPathPainter(),
                             ),
                           ),
+                          const _MapDecorations(),
                           for (var index = 0; index < levels.length; index++)
                             Positioned(
                               top: 28 + index * 135,
@@ -79,6 +81,16 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                               left: constraints.maxWidth * .38,
                               child: const _TreasureChest(),
                             ),
+                          AnimatedPositioned(
+                            key: const ValueKey('map-mascot'),
+                            duration: const Duration(milliseconds: 650),
+                            curve: Curves.easeInOutBack,
+                            top: 48 + (_selectedLevel! - 1) * 135,
+                            left: (_selectedLevel! - 1).isEven
+                                ? constraints.maxWidth * .17 + 80
+                                : constraints.maxWidth * .57 - 62,
+                            child: _MapMascot(emoji: mascot.emoji),
+                          ),
                         ],
                       ),
                     ),
@@ -143,6 +155,69 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
       ),
     );
   }
+}
+
+class _MapMascot extends StatelessWidget {
+  const _MapMascot({required this.emoji});
+  final String emoji;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: 'Selected mascot',
+    child: Container(
+      width: 58,
+      height: 58,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFFFFD84A), width: 4),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x44000000),
+            blurRadius: 8,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Text(emoji, style: const TextStyle(fontSize: 34)),
+    ),
+  );
+}
+
+class _MapDecorations extends StatelessWidget {
+  const _MapDecorations();
+
+  static const items = <({double top, double left, String emoji, double size})>[
+    (top: 80, left: .78, emoji: '☁️', size: 36),
+    (top: 185, left: .05, emoji: '🌳', size: 44),
+    (top: 330, left: .78, emoji: '🌲', size: 46),
+    (top: 470, left: .08, emoji: '🌼', size: 28),
+    (top: 620, left: .76, emoji: '🏡', size: 44),
+    (top: 760, left: .05, emoji: '🦋', size: 28),
+    (top: 900, left: .78, emoji: '🌳', size: 46),
+    (top: 1060, left: .06, emoji: '🌸', size: 28),
+    (top: 1210, left: .77, emoji: '🌲', size: 46),
+    (top: 1390, left: .07, emoji: '🏕️', size: 42),
+  ];
+
+  @override
+  Widget build(BuildContext context) => Positioned.fill(
+    child: LayoutBuilder(
+      builder: (context, constraints) => ExcludeSemantics(
+        child: Stack(
+          children: [
+            for (final item in items)
+              Positioned(
+                top: item.top,
+                left: constraints.maxWidth * item.left,
+                child: Text(item.emoji, style: TextStyle(fontSize: item.size)),
+              ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 class _MapHeader extends StatelessWidget {

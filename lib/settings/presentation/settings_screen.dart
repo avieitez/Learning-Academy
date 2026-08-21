@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../app/theme.dart';
@@ -168,7 +170,7 @@ class _SettingsSection extends StatelessWidget {
   );
 }
 
-class _MascotOption extends StatelessWidget {
+class _MascotOption extends StatefulWidget {
   const _MascotOption({
     required this.mascot,
     required this.name,
@@ -180,30 +182,93 @@ class _MascotOption extends StatelessWidget {
   final String name;
   final bool selected;
   final VoidCallback onPressed;
+
+  @override
+  State<_MascotOption> createState() => _MascotOptionState();
+}
+
+class _MascotOptionState extends State<_MascotOption>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 650),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _MascotOption oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selected && !oldWidget.selected) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => Semantics(
     button: true,
-    selected: selected,
-    label: name,
+    selected: widget.selected,
+    label: widget.name,
     child: InkWell(
-      onTap: onPressed,
+      onTap: widget.onPressed,
       borderRadius: BorderRadius.circular(20),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 220),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFFE1F7FF) : const Color(0xFFF7FAFC),
+          color: widget.selected
+              ? const Color(0xFFE1F7FF)
+              : const Color(0xFFF7FAFC),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: selected ? AppColors.blue : const Color(0xFFDCE8EF),
-            width: selected ? 4 : 2,
+            color: widget.selected ? AppColors.blue : const Color(0xFFDCE8EF),
+            width: widget.selected ? 4 : 2,
           ),
+          boxShadow: widget.selected
+              ? const [
+                  BoxShadow(
+                    color: Color(0x6632B8F2),
+                    blurRadius: 16,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(mascot.emoji, style: const TextStyle(fontSize: 40)),
+            AnimatedBuilder(
+              key: const ValueKey('mascot-selection-animation'),
+              animation: _controller,
+              builder: (context, child) {
+                final value = Curves.easeOut.transform(_controller.value);
+                final jump = -12 * sin(value * 3.1415926535);
+                final turn = sin(value * 6.283185307) * .08;
+                final scale = 1 + sin(value * 3.1415926535) * .18;
+                return Transform.translate(
+                  offset: Offset(0, jump),
+                  child: Transform.rotate(
+                    angle: turn,
+                    child: Transform.scale(scale: scale, child: child),
+                  ),
+                );
+              },
+              child: Text(
+                widget.mascot.emoji,
+                style: const TextStyle(fontSize: 40),
+              ),
+            ),
             Text(
-              name,
+              widget.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.w800),

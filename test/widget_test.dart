@@ -60,6 +60,11 @@ void main() {
     expect(find.text('Configuración'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('mascot-fox')));
+    await tester.pump(const Duration(milliseconds: 250));
+    expect(
+      find.byKey(const ValueKey('mascot-selection-animation')),
+      findsNWidgets(6),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
@@ -102,6 +107,7 @@ void main() {
     expect(find.text('Level Map'), findsOneWidget);
     expect(find.byKey(const ValueKey('level-1')), findsOneWidget);
     expect(find.byKey(const ValueKey('play-level')), findsOneWidget);
+    expect(find.byKey(const ValueKey('map-mascot')), findsOneWidget);
   });
 
   testWidgets('settings has no overflow in Spanish on a narrow phone', (
