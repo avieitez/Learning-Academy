@@ -190,22 +190,24 @@ class _MascotOption extends StatefulWidget {
 class _MascotOptionState extends State<_MascotOption>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  bool _celebrating = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 650),
+      duration: const Duration(milliseconds: 950),
     );
   }
 
-  @override
-  void didUpdateWidget(covariant _MascotOption oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selected && !oldWidget.selected) {
-      _controller.forward(from: 0);
-    }
+  Future<void> _selectMascot() async {
+    if (_controller.isAnimating) return;
+    setState(() => _celebrating = true);
+    await _controller.forward(from: 0);
+    if (!mounted) return;
+    widget.onPressed();
+    setState(() => _celebrating = false);
   }
 
   @override
@@ -220,20 +222,22 @@ class _MascotOptionState extends State<_MascotOption>
     selected: widget.selected,
     label: widget.name,
     child: InkWell(
-      onTap: widget.onPressed,
+      onTap: _selectMascot,
       borderRadius: BorderRadius.circular(20),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 220),
         decoration: BoxDecoration(
-          color: widget.selected
+          color: widget.selected || _celebrating
               ? const Color(0xFFE1F7FF)
               : const Color(0xFFF7FAFC),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: widget.selected ? AppColors.blue : const Color(0xFFDCE8EF),
-            width: widget.selected ? 4 : 2,
+            color: widget.selected || _celebrating
+                ? AppColors.blue
+                : const Color(0xFFDCE8EF),
+            width: widget.selected || _celebrating ? 4 : 2,
           ),
-          boxShadow: widget.selected
+          boxShadow: widget.selected || _celebrating
               ? const [
                   BoxShadow(
                     color: Color(0x6632B8F2),
@@ -250,15 +254,52 @@ class _MascotOptionState extends State<_MascotOption>
               key: const ValueKey('mascot-selection-animation'),
               animation: _controller,
               builder: (context, child) {
-                final value = Curves.easeOut.transform(_controller.value);
-                final jump = -12 * sin(value * 3.1415926535);
-                final turn = sin(value * 6.283185307) * .08;
-                final scale = 1 + sin(value * 3.1415926535) * .18;
-                return Transform.translate(
-                  offset: Offset(0, jump),
-                  child: Transform.rotate(
-                    angle: turn,
-                    child: Transform.scale(scale: scale, child: child),
+                final value = _controller.value;
+                final jump = -22 * sin(value * pi);
+                final turn = sin(value * pi * 4) * .16 * (1 - value);
+                final scale = 1 + sin(value * pi) * .3;
+                final sparkleOpacity = sin(value * pi).clamp(0.0, 1.0);
+                return SizedBox(
+                  width: 76,
+                  height: 62,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: 2,
+                        child: Opacity(
+                          opacity: sparkleOpacity,
+                          child: Transform.rotate(
+                            angle: value * pi,
+                            child: const Text(
+                              '✨',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 4,
+                        right: 0,
+                        child: Opacity(
+                          opacity: sparkleOpacity,
+                          child: const Text(
+                            '⭐',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
+                      Transform.translate(
+                        key: const ValueKey('mascot-jump-transform'),
+                        offset: Offset(0, jump),
+                        child: Transform.rotate(
+                          angle: turn,
+                          child: Transform.scale(scale: scale, child: child),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },

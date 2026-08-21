@@ -61,6 +61,13 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('mascot-fox')));
     await tester.pump(const Duration(milliseconds: 250));
+    final foxCard = find.byKey(const ValueKey('mascot-fox'));
+    final jump = find.descendant(
+      of: foxCard,
+      matching: find.byKey(const ValueKey('mascot-jump-transform')),
+    );
+    final transform = tester.widget<Transform>(jump);
+    expect(transform.transform.entry(1, 3), lessThan(-1));
     expect(
       find.byKey(const ValueKey('mascot-selection-animation')),
       findsNWidgets(6),
