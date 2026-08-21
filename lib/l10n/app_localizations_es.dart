@@ -90,4 +90,44 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get exercisesComingNext =>
       'La sesión de ejercicios es la siguiente etapa de desarrollo.';
+
+  @override
+  String get settings => 'Configuración';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get chooseMascot => 'Elige tu mascota';
+
+  @override
+  String get about => 'Acerca de Learning Academy';
+
+  @override
+  String get aboutDescription =>
+      'Una aplicación de aprendizaje segura y divertida, diseñada para que los niños progresen a su propio ritmo.';
+
+  @override
+  String get version => 'Versión';
+
+  @override
+  String get contactSupport => 'Contacto y soporte';
+
+  @override
+  String get owl => 'Búho';
+
+  @override
+  String get fox => 'Zorro';
+
+  @override
+  String get panda => 'Panda';
+
+  @override
+  String get lion => 'León';
+
+  @override
+  String get bunny => 'Conejito';
+
+  @override
+  String get unicorn => 'Unicornio';
 }

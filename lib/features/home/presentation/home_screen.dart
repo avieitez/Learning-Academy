@@ -5,12 +5,11 @@ import '../../../app/routes.dart';
 import '../../../app/theme.dart';
 import '../../../core/widgets/learning_area_card.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../settings/domain/app_preferences.dart';
 import '../domain/learning_area.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({required this.onLocaleChanged, super.key});
-
-  final ValueChanged<Locale?> onLocaleChanged;
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +32,7 @@ class HomeScreen extends StatelessWidget {
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: _HomeHeader(
-                        localizations: localizations,
-                        onLocaleChanged: onLocaleChanged,
-                      ),
+                      child: _HomeHeader(localizations: localizations),
                     ),
                     SliverPadding(
                       padding: const EdgeInsets.fromLTRB(18, 6, 18, 32),
@@ -118,16 +114,13 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeHeader extends StatelessWidget {
-  const _HomeHeader({
-    required this.localizations,
-    required this.onLocaleChanged,
-  });
+  const _HomeHeader({required this.localizations});
 
   final AppLocalizations localizations;
-  final ValueChanged<Locale?> onLocaleChanged;
 
   @override
   Widget build(BuildContext context) {
+    final mascot = AppPreferencesScope.of(context).value.mascot;
     return Column(
       children: [
         Stack(
@@ -147,21 +140,29 @@ class _HomeHeader extends StatelessWidget {
                 color: Colors.white.withValues(alpha: .95),
                 elevation: 4,
                 shape: const CircleBorder(),
-                child: PopupMenuButton<Locale?>(
-                  key: const ValueKey('language-selector'),
-                  tooltip: localizations.selectLanguage,
+                child: IconButton(
+                  key: const ValueKey('settings-button'),
+                  tooltip: localizations.settings,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRoutes.settings),
                   icon: const Icon(
-                    Icons.language_rounded,
+                    Icons.settings_rounded,
                     color: AppColors.ink,
                   ),
-                  onSelected: onLocaleChanged,
-                  itemBuilder: (_) => const [
-                    PopupMenuItem(value: null, child: Text('Automatic')),
-                    PopupMenuItem(value: Locale('en'), child: Text('English')),
-                    PopupMenuItem(value: Locale('es'), child: Text('Español')),
-                    PopupMenuItem(value: Locale('fr'), child: Text('Français')),
-                  ],
                 ),
+              ),
+            ),
+            Positioned(
+              top: 12,
+              left: 12,
+              child: Container(
+                key: const ValueKey('selected-mascot'),
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(mascot.emoji, style: const TextStyle(fontSize: 28)),
               ),
             ),
           ],

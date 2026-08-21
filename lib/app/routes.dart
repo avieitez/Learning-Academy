@@ -5,6 +5,7 @@ import '../features/mathematics/domain/math_operation.dart';
 import '../features/mathematics/presentation/level_map_screen.dart';
 import '../features/mathematics/presentation/operation_selection_screen.dart';
 import '../features/shared/presentation/feature_placeholder_screen.dart';
+import '../settings/presentation/settings_screen.dart';
 
 enum LearningFeature { mathematics, romanNumbers, clock }
 
@@ -14,15 +15,19 @@ abstract final class AppRoutes {
   static const mathematicsMap = '/mathematics/map';
   static const romanNumbers = '/roman-numbers';
   static const clock = '/clock';
+  static const settings = '/settings';
 
-  static Route<void> onGenerateRoute(
-    RouteSettings settings, {
-    required ValueChanged<Locale?> onLocaleChanged,
-  }) {
+  static Route<void> onGenerateRoute(RouteSettings settings) {
     if (settings.name == home) {
       return MaterialPageRoute<void>(
         settings: settings,
-        builder: (_) => HomeScreen(onLocaleChanged: onLocaleChanged),
+        builder: (_) => const HomeScreen(),
+      );
+    }
+    if (settings.name == AppRoutes.settings) {
+      return MaterialPageRoute<void>(
+        settings: settings,
+        builder: (_) => const SettingsScreen(),
       );
     }
 
@@ -52,8 +57,6 @@ abstract final class AppRoutes {
         builder: (_) => FeaturePlaceholderScreen(feature: feature),
       );
     }
-    return MaterialPageRoute<void>(
-      builder: (_) => HomeScreen(onLocaleChanged: onLocaleChanged),
-    );
+    return MaterialPageRoute<void>(builder: (_) => const HomeScreen());
   }
 }

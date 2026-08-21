@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/theme.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../settings/domain/app_preferences.dart';
 import '../data/mathematics_catalog.dart';
 import '../domain/math_level.dart';
 import '../domain/math_operation.dart';
@@ -17,18 +18,16 @@ class LevelMapScreen extends StatefulWidget {
 }
 
 class _LevelMapScreenState extends State<LevelMapScreen> {
-  late final List<MathLevel> _levels;
-  int _selectedLevel = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _levels = MathematicsCatalog.levels();
-  }
+  int? _selectedLevel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final unlockedLevel = AppPreferencesScope.of(
+      context,
+    ).value.unlockedLevel('mathematics', widget.operation.name);
+    final levels = MathematicsCatalog.levels(currentLevel: unlockedLevel);
+    _selectedLevel ??= unlockedLevel;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -55,7 +54,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                               painter: const LevelPathPainter(),
                             ),
                           ),
-                          for (var index = 0; index < _levels.length; index++)
+                          for (var index = 0; index < levels.length; index++)
                             Positioned(
                               top: 28 + index * 135,
                               left: index.isEven
@@ -63,10 +62,10 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                                   : constraints.maxWidth * .57,
                               child: LevelNode(
                                 key: ValueKey('level-${index + 1}'),
-                                level: _levels[index],
+                                level: levels[index],
                                 selected: _selectedLevel == index + 1,
                                 onPressed:
-                                    _levels[index].status ==
+                                    levels[index].status ==
                                         MathLevelStatus.locked
                                     ? null
                                     : () => setState(
@@ -113,7 +112,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                     ),
                     icon: const Icon(Icons.play_arrow_rounded, size: 34),
                     label: Text(
-                      '${l10n.play} · ${l10n.level} $_selectedLevel',
+                      '${l10n.play} · ${l10n.level} ${_selectedLevel!}',
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w900,

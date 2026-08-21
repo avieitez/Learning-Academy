@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:learning_academy/app/app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
   testWidgets('home builds learning areas from reusable cards', (tester) async {
     await tester.pumpWidget(const LearningAcademyApp());
     await tester.pumpAndSettle();
@@ -42,18 +46,35 @@ void main() {
     expect(title.top, greaterThanOrEqualTo(characters.bottom));
   });
 
-  testWidgets('language selector updates widget text from ARB', (tester) async {
+  testWidgets('settings changes language and mascot', (tester) async {
     await tester.pumpWidget(const LearningAcademyApp());
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('language-selector')));
+
+    await tester.tap(find.byKey(const ValueKey('settings-button')));
     await tester.pumpAndSettle();
+    expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('Automatic'), findsNothing);
+
     await tester.tap(find.text('Español'));
+    await tester.pumpAndSettle();
+    expect(find.text('Configuración'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('mascot-fox')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
 
     expect(find.text('Matemáticas'), findsOneWidget);
     expect(find.text('Números romanos'), findsOneWidget);
     expect(find.text('El reloj'), findsOneWidget);
     expect(find.text('Espacio publicitario'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('selected-mascot')),
+        matching: find.text('🦊'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('addition opens a twelve-level map', (tester) async {

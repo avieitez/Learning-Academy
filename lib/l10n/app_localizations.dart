@@ -261,6 +261,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The exercise session is the next development stage.'**
   String get exercisesComingNext;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @chooseMascot.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your mascot'**
+  String get chooseMascot;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About Learning Academy'**
+  String get about;
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A safe and playful learning app designed to help children progress at their own pace.'**
+  String get aboutDescription;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @contactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact and support'**
+  String get contactSupport;
+
+  /// No description provided for @owl.
+  ///
+  /// In en, this message translates to:
+  /// **'Owl'**
+  String get owl;
+
+  /// No description provided for @fox.
+  ///
+  /// In en, this message translates to:
+  /// **'Fox'**
+  String get fox;
+
+  /// No description provided for @panda.
+  ///
+  /// In en, this message translates to:
+  /// **'Panda'**
+  String get panda;
+
+  /// No description provided for @lion.
+  ///
+  /// In en, this message translates to:
+  /// **'Lion'**
+  String get lion;
+
+  /// No description provided for @bunny.
+  ///
+  /// In en, this message translates to:
+  /// **'Bunny'**
+  String get bunny;
+
+  /// No description provided for @unicorn.
+  ///
+  /// In en, this message translates to:
+  /// **'Unicorn'**
+  String get unicorn;
 }
 
 class _AppLocalizationsDelegate

@@ -26,5 +26,18 @@
   "levelMap": "Mapa de niveles",
   "level": "Nivel",
   "play": "Jugar",
-  "exercisesComingNext": "La sesión de ejercicios es la siguiente etapa de desarrollo."
+  "exercisesComingNext": "La sesión de ejercicios es la siguiente etapa de desarrollo.",
+  "settings": "Configuración",
+  "language": "Idioma",
+  "chooseMascot": "Elige tu mascota",
+  "about": "Acerca de Learning Academy",
+  "aboutDescription": "Una aplicación de aprendizaje segura y divertida, diseñada para que los niños progresen a su propio ritmo.",
+  "version": "Versión",
+  "contactSupport": "Contacto y soporte",
+  "owl": "Búho",
+  "fox": "Zorro",
+  "panda": "Panda",
+  "lion": "León",
+  "bunny": "Conejito",
+  "unicorn": "Unicornio"
 }

@@ -26,5 +26,18 @@
   "levelMap": "Level Map",
   "level": "Level",
   "play": "Play",
-  "exercisesComingNext": "The exercise session is the next development stage."
+  "exercisesComingNext": "The exercise session is the next development stage.",
+  "settings": "Settings",
+  "language": "Language",
+  "chooseMascot": "Choose your mascot",
+  "about": "About Learning Academy",
+  "aboutDescription": "A safe and playful learning app designed to help children progress at their own pace.",
+  "version": "Version",
+  "contactSupport": "Contact and support",
+  "owl": "Owl",
+  "fox": "Fox",
+  "panda": "Panda",
+  "lion": "Lion",
+  "bunny": "Bunny",
+  "unicorn": "Unicorn"
 }
