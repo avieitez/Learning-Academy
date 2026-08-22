@@ -130,4 +130,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unicorn => 'Unicornio';
+
+  @override
+  String get additionLevelOne => 'Suma · Nivel 1';
+
+  @override
+  String get howManyAltogether => '¿Cuántos hay en total?';
+
+  @override
+  String get chooseAnAnswer => '¡Elige una respuesta!';
+
+  @override
+  String get correctAnswer => '¡Genial! ¡Es correcto!';
+
+  @override
+  String get keepTrying => '¡Buen intento! Continuemos.';
+
+  @override
+  String get greatJob => '¡Gran trabajo!';
+
+  @override
+  String get goodTry => '¡Buen intento!';
+
+  @override
+  String get returnToMap => 'Volver al mapa';
 }

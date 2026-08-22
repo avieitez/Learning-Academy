@@ -39,5 +39,13 @@
   "panda": "Panda",
   "lion": "Lion",
   "bunny": "Lapin",
-  "unicorn": "Licorne"
+  "unicorn": "Licorne",
+  "additionLevelOne": "Addition · Niveau 1",
+  "howManyAltogether": "Combien y en a-t-il en tout ?",
+  "chooseAnAnswer": "Choisis une réponse !",
+  "correctAnswer": "Bravo ! C'est correct !",
+  "keepTrying": "Bien essayé ! Continuons.",
+  "greatJob": "Excellent travail !",
+  "goodTry": "Bien essayé !",
+  "returnToMap": "Retour à la carte"
 }

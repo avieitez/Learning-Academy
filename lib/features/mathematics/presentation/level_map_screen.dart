@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/theme.dart';
+import '../../../app/routes.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../settings/domain/app_preferences.dart';
 import '../data/mathematics_catalog.dart';
@@ -115,7 +116,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                   height: 60,
                   child: FilledButton.icon(
                     key: const ValueKey('play-level'),
-                    onPressed: () => _showComingNext(context, l10n),
+                    onPressed: () => _playSelectedLevel(context, l10n),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.green,
                       shape: RoundedRectangleBorder(
@@ -147,7 +148,11 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
     MathOperation.division => l.division,
   };
 
-  void _showComingNext(BuildContext context, AppLocalizations l10n) {
+  void _playSelectedLevel(BuildContext context, AppLocalizations l10n) {
+    if (widget.operation == MathOperation.addition && _selectedLevel == 1) {
+      Navigator.pushNamed(context, AppRoutes.mathematicsExercise);
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(l10n.exercisesComingNext),

@@ -339,6 +339,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unicorn'**
   String get unicorn;
+
+  /// No description provided for @additionLevelOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Addition · Level 1'**
+  String get additionLevelOne;
+
+  /// No description provided for @howManyAltogether.
+  ///
+  /// In en, this message translates to:
+  /// **'How many are there altogether?'**
+  String get howManyAltogether;
+
+  /// No description provided for @chooseAnAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an answer!'**
+  String get chooseAnAnswer;
+
+  /// No description provided for @correctAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Great! That\'s correct!'**
+  String get correctAnswer;
+
+  /// No description provided for @keepTrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice try! Let\'s continue.'**
+  String get keepTrying;
+
+  /// No description provided for @greatJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job!'**
+  String get greatJob;
+
+  /// No description provided for @goodTry.
+  ///
+  /// In en, this message translates to:
+  /// **'Good try!'**
+  String get goodTry;
+
+  /// No description provided for @returnToMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to map'**
+  String get returnToMap;
 }
 
 class _AppLocalizationsDelegate

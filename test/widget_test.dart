@@ -60,6 +60,7 @@ void main() {
     expect(find.text('Configuración'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('mascot-fox')));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 250));
     final foxCard = find.byKey(const ValueKey('mascot-fox'));
     final jump = find.descendant(
@@ -115,6 +116,18 @@ void main() {
     expect(find.byKey(const ValueKey('level-1')), findsOneWidget);
     expect(find.byKey(const ValueKey('play-level')), findsOneWidget);
     expect(find.byKey(const ValueKey('map-mascot')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('play-level')));
+    await tester.pumpAndSettle();
+    expect(find.text('Addition · Level 1'), findsOneWidget);
+    expect(find.byKey(const ValueKey('addition-question')), findsOneWidget);
+    expect(find.text('1 + 1 = ?'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('answer-2')));
+    await tester.pump(const Duration(milliseconds: 250));
+    expect(find.text("Great! That's correct!"), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 700));
+    expect(find.text('2 + 1 = ?'), findsOneWidget);
   });
 
   testWidgets('settings has no overflow in Spanish on a narrow phone', (

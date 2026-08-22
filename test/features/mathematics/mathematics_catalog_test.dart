@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:learning_academy/features/mathematics/data/mathematics_catalog.dart';
 import 'package:learning_academy/features/mathematics/domain/math_level.dart';
+import 'package:learning_academy/features/mathematics/data/generators/addition_exercise_generator.dart';
 
 void main() {
   test('catalog creates twelve sequential levels', () {
@@ -13,5 +14,17 @@ void main() {
     expect(levels[0].stars, 3);
     expect(levels[3].status, MathLevelStatus.available);
     expect(levels[4].status, MathLevelStatus.locked);
+  });
+
+  test('addition level one contains ten valid visual exercises', () {
+    final exercises = AdditionExerciseGenerator.levelOne();
+
+    expect(exercises, hasLength(10));
+    for (final exercise in exercises) {
+      expect(exercise.answers, hasLength(3));
+      expect(exercise.answers.toSet(), hasLength(3));
+      expect(exercise.answers, contains(exercise.correctAnswer));
+      expect(exercise.correctAnswer, lessThanOrEqualTo(8));
+    }
   });
 }

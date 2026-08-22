@@ -39,5 +39,13 @@
   "panda": "Panda",
   "lion": "Lion",
   "bunny": "Bunny",
-  "unicorn": "Unicorn"
+  "unicorn": "Unicorn",
+  "additionLevelOne": "Addition · Level 1",
+  "howManyAltogether": "How many are there altogether?",
+  "chooseAnAnswer": "Choose an answer!",
+  "correctAnswer": "Great! That's correct!",
+  "keepTrying": "Nice try! Let's continue.",
+  "greatJob": "Great job!",
+  "goodTry": "Good try!",
+  "returnToMap": "Return to map"
 }
