@@ -47,7 +47,7 @@ class _LearningAcademyAppState extends State<LearningAcademyApp> {
         title: 'Learning Academy',
         debugShowCheckedModeBanner: false,
         theme: LearningAcademyTheme.light,
-        locale: languageCode == null ? null : Locale(languageCode),
+        locale: Locale(languageCode),
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         onGenerateRoute: AppRoutes.onGenerateRoute,

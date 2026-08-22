@@ -100,6 +100,72 @@ abstract class AppLocalizations {
     Locale('fr'),
   ];
 
+  /// No description provided for @resetData.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset app data'**
+  String get resetData;
+
+  /// No description provided for @resetDataDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase the selected mascot, language, unlocked levels and unfinished exercises.'**
+  String get resetDataDescription;
+
+  /// No description provided for @resetDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over?'**
+  String get resetDataTitle;
+
+  /// No description provided for @resetDataQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'All Learning Academy progress on this device will be erased. This cannot be undone.'**
+  String get resetDataQuestion;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @deleteData.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase data'**
+  String get deleteData;
+
+  /// No description provided for @dataDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Data erased. Learning Academy is ready to start again.'**
+  String get dataDeleted;
+
+  /// No description provided for @resumeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue your adventure?'**
+  String get resumeTitle;
+
+  /// No description provided for @resumeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an unfinished exercise session.'**
+  String get resumeMessage;
+
+  /// No description provided for @continueSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueSession;
+
+  /// No description provided for @startAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Start again'**
+  String get startAgain;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:

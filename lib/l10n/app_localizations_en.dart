@@ -9,6 +9,42 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get resetData => 'Reset app data';
+
+  @override
+  String get resetDataDescription =>
+      'Erase the selected mascot, language, unlocked levels and unfinished exercises.';
+
+  @override
+  String get resetDataTitle => 'Start over?';
+
+  @override
+  String get resetDataQuestion =>
+      'All Learning Academy progress on this device will be erased. This cannot be undone.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get deleteData => 'Erase data';
+
+  @override
+  String get dataDeleted =>
+      'Data erased. Learning Academy is ready to start again.';
+
+  @override
+  String get resumeTitle => 'Continue your adventure?';
+
+  @override
+  String get resumeMessage => 'You have an unfinished exercise session.';
+
+  @override
+  String get continueSession => 'Continue';
+
+  @override
+  String get startAgain => 'Start again';
+
+  @override
   String get appTitle => 'Learning Academy';
 
   @override

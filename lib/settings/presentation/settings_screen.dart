@@ -16,9 +16,7 @@ class SettingsScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final controller = AppPreferencesScope.of(context);
     final preferences = controller.value;
-    final selectedLanguage =
-        preferences.languageCode ??
-        Localizations.localeOf(context).languageCode;
+    final selectedLanguage = preferences.languageCode;
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.settings),
@@ -105,6 +103,29 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 18),
+            _SettingsSection(
+              title: l10n.resetData,
+              icon: Icons.delete_sweep_rounded,
+              iconColor: const Color(0xFFD83B4D),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(l10n.resetDataDescription),
+                  const SizedBox(height: 14),
+                  OutlinedButton.icon(
+                    key: const ValueKey('reset-app-data'),
+                    onPressed: () => _confirmReset(context, controller),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFFD83B4D),
+                      side: const BorderSide(color: Color(0xFFD83B4D)),
+                    ),
+                    icon: const Icon(Icons.delete_outline_rounded),
+                    label: Text(l10n.deleteData),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -120,6 +141,45 @@ class SettingsScreen extends StatelessWidget {
     'unicorn' => l.unicorn,
     _ => mascot.id,
   };
+
+  Future<void> _confirmReset(
+    BuildContext context,
+    AppPreferencesController controller,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        icon: const Icon(
+          Icons.delete_sweep_rounded,
+          color: Color(0xFFD83B4D),
+          size: 42,
+        ),
+        title: Text(l10n.resetDataTitle),
+        content: Text(l10n.resetDataQuestion),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            key: const ValueKey('confirm-reset-app-data'),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFFD83B4D),
+            ),
+            child: Text(l10n.deleteData),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    await controller.resetAll();
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).dataDeleted)),
+    );
+  }
 }
 
 class _SettingsSection extends StatelessWidget {
@@ -127,10 +187,12 @@ class _SettingsSection extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.child,
+    this.iconColor = AppColors.blue,
   });
   final String title;
   final IconData icon;
   final Widget child;
+  final Color iconColor;
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(18),
@@ -151,7 +213,7 @@ class _SettingsSection extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: AppColors.blue),
+            Icon(icon, color: iconColor),
             const SizedBox(width: 10),
             Expanded(
               child: Text(

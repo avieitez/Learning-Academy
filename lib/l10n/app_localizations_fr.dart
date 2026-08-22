@@ -9,6 +9,42 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get resetData => 'Réinitialiser les données';
+
+  @override
+  String get resetDataDescription =>
+      'Efface la mascotte, la langue, les niveaux débloqués et les exercices inachevés.';
+
+  @override
+  String get resetDataTitle => 'Recommencer ?';
+
+  @override
+  String get resetDataQuestion =>
+      'Toute la progression de Learning Academy sur cet appareil sera effacée. Cette action est irréversible.';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get deleteData => 'Effacer les données';
+
+  @override
+  String get dataDeleted =>
+      'Données effacées. Learning Academy est prête à recommencer.';
+
+  @override
+  String get resumeTitle => 'Continuer l’aventure ?';
+
+  @override
+  String get resumeMessage => 'Tu as une session d’exercices inachevée.';
+
+  @override
+  String get continueSession => 'Continuer';
+
+  @override
+  String get startAgain => 'Recommencer';
+
+  @override
   String get appTitle => 'Learning Academy';
 
   @override

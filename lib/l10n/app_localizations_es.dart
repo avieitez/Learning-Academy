@@ -9,6 +9,42 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get resetData => 'Restablecer datos de la app';
+
+  @override
+  String get resetDataDescription =>
+      'Borra la mascota, el idioma, los niveles desbloqueados y los ejercicios sin terminar.';
+
+  @override
+  String get resetDataTitle => '¿Empezar de nuevo?';
+
+  @override
+  String get resetDataQuestion =>
+      'Se borrará todo el progreso de Learning Academy en este dispositivo. Esta acción no se puede deshacer.';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get deleteData => 'Borrar datos';
+
+  @override
+  String get dataDeleted =>
+      'Datos borrados. Learning Academy está lista para empezar de nuevo.';
+
+  @override
+  String get resumeTitle => '¿Continuamos la aventura?';
+
+  @override
+  String get resumeMessage => 'Tienes una sesión de ejercicios sin terminar.';
+
+  @override
+  String get continueSession => 'Continuar';
+
+  @override
+  String get startAgain => 'Empezar de nuevo';
+
+  @override
   String get appTitle => 'Learning Academy';
 
   @override

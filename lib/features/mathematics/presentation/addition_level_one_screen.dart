@@ -6,6 +6,7 @@ import '../../../app/theme.dart';
 import '../../../core/audio/audio_feedback_service.dart';
 import '../../../core/audio/audio_service.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../progress/domain/exercise_session.dart';
 import '../../../settings/domain/app_preferences.dart';
 import '../data/generators/addition_exercise_generator.dart';
 import '../domain/addition_exercise.dart';
@@ -23,11 +24,15 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   late final List<AdditionExercise> _exercises;
   int _exerciseIndex = 0;
   int _correctAnswers = 0;
+  int _incorrectAnswers = 0;
   int? _selectedAnswer;
   bool? _isCorrect;
   bool _answering = false;
   late final AudioService _audioService;
   late final bool _ownsAudioService;
+  DateTime _startedAt = DateTime.now();
+  bool _sessionChecked = false;
+  bool _exiting = false;
 
   AdditionExercise get _exercise => _exercises[_exerciseIndex];
 
@@ -40,6 +45,21 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_sessionChecked) return;
+    _sessionChecked = true;
+    final session = AppPreferencesScope.of(
+      context,
+    ).value.session('mathematics', 'addition', 1);
+    if (session != null && session.exerciseIndex < _exercises.length) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _offerResume(session),
+      );
+    }
+  }
+
+  @override
   void dispose() {
     if (_ownsAudioService) unawaited(_audioService.dispose());
     super.dispose();
@@ -49,90 +69,97 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final mascot = AppPreferencesScope.of(context).value.mascot;
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF84DCFA), Color(0xFFE9FAFF)],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) unawaited(_exitLevel());
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF84DCFA), Color(0xFFE9FAFF)],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _ExerciseHeader(
-                title: l10n.additionLevelOne,
-                current: _exerciseIndex + 1,
-                total: _exercises.length,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
-                  child: Column(
-                    children: [
-                      Text(
-                        l10n.howManyAltogether,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.headlineLarge?.copyWith(fontSize: 26),
-                      ),
-                      const SizedBox(height: 18),
-                      _VisualAddition(exercise: _exercise),
-                      const SizedBox(height: 18),
-                      Text(
-                        '${_exercise.left} + ${_exercise.right} = ?',
-                        key: const ValueKey('addition-question'),
-                        style: const TextStyle(
-                          color: AppColors.ink,
-                          fontSize: 44,
-                          fontWeight: FontWeight.w900,
+          child: SafeArea(
+            child: Column(
+              children: [
+                _ExerciseHeader(
+                  title: l10n.additionLevelOne,
+                  current: _exerciseIndex + 1,
+                  total: _exercises.length,
+                  onClose: _exitLevel,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.howManyAltogether,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.headlineLarge?.copyWith(fontSize: 26),
                         ),
-                      ),
-                      const SizedBox(height: 22),
-                      Row(
-                        children: [
-                          for (final answer in _exercise.answers)
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 5,
-                                ),
-                                child: _AnswerButton(
-                                  answer: answer,
-                                  selectedAnswer: _selectedAnswer,
-                                  correctAnswer: _exercise.correctAnswer,
-                                  enabled: !_answering,
-                                  onPressed: () => _answer(answer),
+                        const SizedBox(height: 18),
+                        _VisualAddition(exercise: _exercise),
+                        const SizedBox(height: 18),
+                        Text(
+                          '${_exercise.left} + ${_exercise.right} = ?',
+                          key: const ValueKey('addition-question'),
+                          style: const TextStyle(
+                            color: AppColors.ink,
+                            fontSize: 44,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+                        Row(
+                          children: [
+                            for (final answer in _exercise.answers)
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                  ),
+                                  child: _AnswerButton(
+                                    answer: answer,
+                                    selectedAnswer: _selectedAnswer,
+                                    correctAnswer: _exercise.correctAnswer,
+                                    enabled: !_answering,
+                                    onPressed: () => _answer(answer),
+                                  ),
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        child: _isCorrect == null
-                            ? _MascotCoach(
-                                key: const ValueKey('mascot-waiting'),
-                                emoji: mascot.emoji,
-                                message: l10n.chooseAnAnswer,
-                              )
-                            : _MascotCoach(
-                                key: ValueKey(_isCorrect),
-                                emoji: mascot.emoji,
-                                message: _isCorrect!
-                                    ? l10n.correctAnswer
-                                    : l10n.keepTrying,
-                                celebrating: _isCorrect!,
-                              ),
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: _isCorrect == null
+                              ? _MascotCoach(
+                                  key: const ValueKey('mascot-waiting'),
+                                  emoji: mascot.emoji,
+                                  message: l10n.chooseAnAnswer,
+                                )
+                              : _MascotCoach(
+                                  key: ValueKey(_isCorrect),
+                                  emoji: mascot.emoji,
+                                  message: _isCorrect!
+                                      ? l10n.correctAnswer
+                                      : l10n.keepTrying,
+                                  celebrating: _isCorrect!,
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -149,20 +176,95 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
       _answering = true;
       _selectedAnswer = answer;
       _isCorrect = correct;
-      if (correct) _correctAnswers++;
+      if (correct) {
+        _correctAnswers++;
+      } else {
+        _incorrectAnswers++;
+      }
     });
     await Future<void>.delayed(const Duration(milliseconds: 1600));
     if (!mounted) return;
     if (_exerciseIndex == _exercises.length - 1) {
+      await AppPreferencesScope.of(
+        context,
+      ).clearSession(area: 'mathematics', activity: 'addition', level: 1);
       await _showResults();
       return;
     }
+    final nextIndex = _exerciseIndex + 1;
+    await _saveSession(exerciseIndex: nextIndex);
+    if (!mounted) return;
     setState(() {
-      _exerciseIndex++;
+      _exerciseIndex = nextIndex;
       _selectedAnswer = null;
       _isCorrect = null;
       _answering = false;
     });
+  }
+
+  Future<void> _offerResume(ExerciseSession session) async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    final resume = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        icon: const Icon(
+          Icons.auto_awesome_rounded,
+          color: AppColors.orange,
+          size: 42,
+        ),
+        title: Text(l10n.resumeTitle),
+        content: Text(
+          '${l10n.resumeMessage}\n${session.exerciseIndex + 1}/${_exercises.length}',
+        ),
+        actions: [
+          TextButton(
+            key: const ValueKey('restart-session'),
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.startAgain),
+          ),
+          FilledButton(
+            key: const ValueKey('resume-session'),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.continueSession),
+          ),
+        ],
+      ),
+    );
+    if (!mounted) return;
+    if (resume == true) {
+      setState(() {
+        _exerciseIndex = session.exerciseIndex.clamp(0, _exercises.length - 1);
+        _correctAnswers = session.correctAnswers;
+        _incorrectAnswers = session.incorrectAnswers;
+        _startedAt = session.startedAt;
+      });
+    } else {
+      await AppPreferencesScope.of(
+        context,
+      ).clearSession(area: 'mathematics', activity: 'addition', level: 1);
+    }
+  }
+
+  Future<void> _saveSession({int? exerciseIndex}) =>
+      AppPreferencesScope.of(context).saveSession(
+        ExerciseSession(
+          area: 'mathematics',
+          activity: 'addition',
+          level: 1,
+          exerciseIndex: exerciseIndex ?? _exerciseIndex,
+          correctAnswers: _correctAnswers,
+          incorrectAnswers: _incorrectAnswers,
+          startedAt: _startedAt,
+        ),
+      );
+
+  Future<void> _exitLevel() async {
+    if (_exiting || !mounted) return;
+    _exiting = true;
+    await _saveSession();
+    if (mounted) Navigator.pop(context);
   }
 
   Future<void> _showResults() async {
@@ -215,10 +317,12 @@ class _ExerciseHeader extends StatelessWidget {
     required this.title,
     required this.current,
     required this.total,
+    required this.onClose,
   });
   final String title;
   final int current;
   final int total;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -226,7 +330,7 @@ class _ExerciseHeader extends StatelessWidget {
     child: Row(
       children: [
         IconButton.filledTonal(
-          onPressed: () => Navigator.pop(context),
+          onPressed: onClose,
           icon: const Icon(Icons.close_rounded),
         ),
         const SizedBox(width: 8),
