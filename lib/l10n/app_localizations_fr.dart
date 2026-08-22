@@ -9,6 +9,15 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get dog => 'Chien';
+
+  @override
+  String get sheep => 'Mouton';
+
+  @override
+  String get tapToHearAnimal => 'Touche pour écouter son cri';
+
+  @override
   String get resetData => 'Réinitialiser les données';
 
   @override

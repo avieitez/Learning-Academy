@@ -188,6 +188,7 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
       await AppPreferencesScope.of(
         context,
       ).clearSession(area: 'mathematics', activity: 'addition', level: 1);
+      unawaited(_audioService.playLevelComplete());
       await _showResults();
       return;
     }

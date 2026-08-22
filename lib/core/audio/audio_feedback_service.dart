@@ -7,17 +7,32 @@ class AudioFeedbackService implements AudioService {
   int _playbackId = 0;
 
   @override
-  Future<void> playCorrect() => _play('sounds/common/correct.mp3', .72);
+  Future<void> playCorrect() => _play(
+    'sounds/common/correct.wav',
+    .72,
+    const Duration(milliseconds: 1550),
+  );
 
   @override
-  Future<void> playIncorrect() => _play('sounds/common/incorrect.wav', .55);
+  Future<void> playIncorrect() => _play(
+    'sounds/common/incorrect.wav',
+    .55,
+    const Duration(milliseconds: 1550),
+  );
 
-  Future<void> _play(String asset, double volume) async {
+  @override
+  Future<void> playLevelComplete() => _play(
+    'sounds/common/level_complete.wav',
+    .75,
+    const Duration(milliseconds: 2300),
+  );
+
+  Future<void> _play(String asset, double volume, Duration audibleTime) async {
     final playbackId = ++_playbackId;
     try {
       await _player.stop();
       await _player.play(AssetSource(asset), volume: volume);
-      await Future<void>.delayed(const Duration(milliseconds: 1550));
+      await Future<void>.delayed(audibleTime);
       if (playbackId != _playbackId) return;
       for (var step = 3; step >= 1; step--) {
         await _player.setVolume(volume * step / 4);

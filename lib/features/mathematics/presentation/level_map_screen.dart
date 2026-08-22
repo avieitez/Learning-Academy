@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app/theme.dart';
@@ -20,6 +23,14 @@ class LevelMapScreen extends StatefulWidget {
 
 class _LevelMapScreenState extends State<LevelMapScreen> {
   int? _selectedLevel;
+  final AudioPlayer _animalPlayer = AudioPlayer();
+  int _animalPlaybackId = 0;
+
+  @override
+  void dispose() {
+    unawaited(_animalPlayer.dispose());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +68,12 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                             ),
                           ),
                           const _MapDecorations(),
+                          _MapAnimals(
+                            dogLabel: l10n.dog,
+                            sheepLabel: l10n.sheep,
+                            tapHint: l10n.tapToHearAnimal,
+                            onAnimalPressed: _playAnimalSound,
+                          ),
                           for (var index = 0; index < levels.length; index++)
                             Positioned(
                               top: 28 + index * 135,
@@ -84,8 +101,8 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                             ),
                           AnimatedPositioned(
                             key: const ValueKey('map-mascot'),
-                            duration: const Duration(milliseconds: 650),
-                            curve: Curves.easeInOutBack,
+                            duration: const Duration(milliseconds: 900),
+                            curve: Curves.easeInOutCubic,
                             top: 48 + (_selectedLevel! - 1) * 135,
                             left: (_selectedLevel! - 1).isEven
                                 ? constraints.maxWidth * .17 + 80
@@ -141,6 +158,18 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
     );
   }
 
+  Future<void> _playAnimalSound(String asset) async {
+    final playbackId = ++_animalPlaybackId;
+    try {
+      await _animalPlayer.stop();
+      await _animalPlayer.play(AssetSource(asset), volume: .75);
+      await Future<void>.delayed(const Duration(milliseconds: 1900));
+      if (playbackId == _animalPlaybackId) await _animalPlayer.stop();
+    } catch (_) {
+      // A decorative interaction must never interrupt map navigation.
+    }
+  }
+
   String _operationTitle(AppLocalizations l) => switch (widget.operation) {
     MathOperation.addition => l.addition,
     MathOperation.subtraction => l.subtraction,
@@ -160,6 +189,109 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
       ),
     );
   }
+}
+
+class _MapAnimals extends StatelessWidget {
+  const _MapAnimals({
+    required this.dogLabel,
+    required this.sheepLabel,
+    required this.tapHint,
+    required this.onAnimalPressed,
+  });
+
+  final String dogLabel;
+  final String sheepLabel;
+  final String tapHint;
+  final ValueChanged<String> onAnimalPressed;
+
+  @override
+  Widget build(BuildContext context) => Positioned.fill(
+    child: LayoutBuilder(
+      builder: (context, constraints) => Stack(
+        children: [
+          Positioned(
+            top: 250,
+            left: constraints.maxWidth * .03,
+            child: _SoundAnimal(
+              key: const ValueKey('map-animal-dog'),
+              emoji: '🐶',
+              label: dogLabel,
+              tapHint: tapHint,
+              onPressed: () => onAnimalPressed('sounds/animals/dog.mp3'),
+            ),
+          ),
+          Positioned(
+            top: 835,
+            right: constraints.maxWidth * .03,
+            child: _SoundAnimal(
+              key: const ValueKey('map-animal-sheep'),
+              emoji: '🐑',
+              label: sheepLabel,
+              tapHint: tapHint,
+              onPressed: () => onAnimalPressed('sounds/animals/sheep.mp3'),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _SoundAnimal extends StatefulWidget {
+  const _SoundAnimal({
+    required this.emoji,
+    required this.label,
+    required this.tapHint,
+    required this.onPressed,
+    super.key,
+  });
+
+  final String emoji;
+  final String label;
+  final String tapHint;
+  final VoidCallback onPressed;
+
+  @override
+  State<_SoundAnimal> createState() => _SoundAnimalState();
+}
+
+class _SoundAnimalState extends State<_SoundAnimal> {
+  bool _reacting = false;
+
+  Future<void> _react() async {
+    if (_reacting) return;
+    widget.onPressed();
+    setState(() => _reacting = true);
+    await Future<void>.delayed(const Duration(milliseconds: 650));
+    if (mounted) setState(() => _reacting = false);
+  }
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: widget.label,
+    hint: widget.tapHint,
+    child: GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _react,
+      child: SizedBox(
+        width: 68,
+        height: 68,
+        child: Center(
+          child: AnimatedScale(
+            scale: _reacting ? 1.3 : 1,
+            duration: const Duration(milliseconds: 240),
+            curve: Curves.elasticOut,
+            child: AnimatedRotation(
+              turns: _reacting ? .04 : 0,
+              duration: const Duration(milliseconds: 220),
+              child: Text(widget.emoji, style: const TextStyle(fontSize: 44)),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class _MapMascot extends StatelessWidget {

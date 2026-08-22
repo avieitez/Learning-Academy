@@ -1,5 +1,8 @@
 {
   "@@locale": "fr",
+  "dog": "Chien",
+  "sheep": "Mouton",
+  "tapToHearAnimal": "Touche pour écouter son cri",
   "resetData": "Réinitialiser les données",
   "resetDataDescription": "Efface la mascotte, la langue, les niveaux débloqués et les exercices inachevés.",
   "resetDataTitle": "Recommencer ?",

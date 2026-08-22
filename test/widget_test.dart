@@ -116,6 +116,18 @@ void main() {
     expect(find.byKey(const ValueKey('level-1')), findsOneWidget);
     expect(find.byKey(const ValueKey('play-level')), findsOneWidget);
     expect(find.byKey(const ValueKey('map-mascot')), findsOneWidget);
+    expect(find.byKey(const ValueKey('map-animal-dog')), findsOneWidget);
+    expect(find.byKey(const ValueKey('map-animal-sheep')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('map-animal-dog')));
+    await tester.pump(const Duration(milliseconds: 200));
+    final reactingDog = tester.widget<AnimatedScale>(
+      find.descendant(
+        of: find.byKey(const ValueKey('map-animal-dog')),
+        matching: find.byType(AnimatedScale),
+      ),
+    );
+    expect(reactingDog.scale, greaterThan(1));
 
     await tester.tap(find.byKey(const ValueKey('play-level')));
     await tester.pumpAndSettle();

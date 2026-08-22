@@ -100,6 +100,24 @@ abstract class AppLocalizations {
     Locale('fr'),
   ];
 
+  /// No description provided for @dog.
+  ///
+  /// In en, this message translates to:
+  /// **'Dog'**
+  String get dog;
+
+  /// No description provided for @sheep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheep'**
+  String get sheep;
+
+  /// No description provided for @tapToHearAnimal.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to hear its sound'**
+  String get tapToHearAnimal;
+
   /// No description provided for @resetData.
   ///
   /// In en, this message translates to:

@@ -1,5 +1,8 @@
 {
   "@@locale": "en",
+  "dog": "Dog",
+  "sheep": "Sheep",
+  "tapToHearAnimal": "Tap to hear its sound",
   "resetData": "Reset app data",
   "resetDataDescription": "Erase the selected mascot, language, unlocked levels and unfinished exercises.",
   "resetDataTitle": "Start over?",

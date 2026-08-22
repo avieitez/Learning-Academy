@@ -26,3 +26,4 @@ flutter:
   assets:
     - assets/images/common/
     - assets/sounds/common/
+    - assets/sounds/animals/
