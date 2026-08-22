@@ -127,6 +127,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 250));
     expect(find.text("Great! That's correct!"), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 700));
+    expect(find.text("Great! That's correct!"), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('2 + 1 = ?'), findsOneWidget);
   });
 

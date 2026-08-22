@@ -1,8 +1,12 @@
 import 'package:flutter/widgets.dart';
 
 import 'app/app.dart';
+import 'settings/data/shared_preferences_repository.dart';
+import 'settings/domain/app_preferences.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const LearningAcademyApp());
+  final preferences = AppPreferencesController(SharedPreferencesRepository());
+  await preferences.load();
+  runApp(LearningAcademyApp(preferencesController: preferences));
 }

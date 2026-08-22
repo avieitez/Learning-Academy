@@ -1,13 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/audio/audio_feedback_service.dart';
+import '../../../core/audio/audio_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../settings/domain/app_preferences.dart';
 import '../data/generators/addition_exercise_generator.dart';
 import '../domain/addition_exercise.dart';
 
 class AdditionLevelOneScreen extends StatefulWidget {
-  const AdditionLevelOneScreen({super.key});
+  const AdditionLevelOneScreen({this.audioService, super.key});
+
+  final AudioService? audioService;
 
   @override
   State<AdditionLevelOneScreen> createState() => _AdditionLevelOneScreenState();
@@ -20,6 +26,8 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   int? _selectedAnswer;
   bool? _isCorrect;
   bool _answering = false;
+  late final AudioService _audioService;
+  late final bool _ownsAudioService;
 
   AdditionExercise get _exercise => _exercises[_exerciseIndex];
 
@@ -27,6 +35,14 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   void initState() {
     super.initState();
     _exercises = AdditionExerciseGenerator.levelOne();
+    _ownsAudioService = widget.audioService == null;
+    _audioService = widget.audioService ?? AudioFeedbackService();
+  }
+
+  @override
+  void dispose() {
+    if (_ownsAudioService) unawaited(_audioService.dispose());
+    super.dispose();
   }
 
   @override
@@ -126,13 +142,16 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   Future<void> _answer(int answer) async {
     if (_answering) return;
     final correct = _exercise.checkAnswer(answer);
+    unawaited(
+      correct ? _audioService.playCorrect() : _audioService.playIncorrect(),
+    );
     setState(() {
       _answering = true;
       _selectedAnswer = answer;
       _isCorrect = correct;
       if (correct) _correctAnswers++;
     });
-    await Future<void>.delayed(const Duration(milliseconds: 850));
+    await Future<void>.delayed(const Duration(milliseconds: 1600));
     if (!mounted) return;
     if (_exerciseIndex == _exercises.length - 1) {
       await _showResults();
