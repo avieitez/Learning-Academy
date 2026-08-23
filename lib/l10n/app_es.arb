@@ -2,6 +2,8 @@
   "@@locale": "es",
   "dog": "Perro",
   "sheep": "Oveja",
+  "rooster": "Gallo",
+  "horse": "Caballo",
   "tapToHearAnimal": "Toca para escuchar su sonido",
   "resetData": "Restablecer datos de la app",
   "resetDataDescription": "Borra la mascota, el idioma, los niveles desbloqueados y los ejercicios sin terminar.",

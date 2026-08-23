@@ -112,6 +112,18 @@ abstract class AppLocalizations {
   /// **'Sheep'**
   String get sheep;
 
+  /// No description provided for @rooster.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooster'**
+  String get rooster;
+
+  /// No description provided for @horse.
+  ///
+  /// In en, this message translates to:
+  /// **'Horse'**
+  String get horse;
+
   /// No description provided for @tapToHearAnimal.
   ///
   /// In en, this message translates to:

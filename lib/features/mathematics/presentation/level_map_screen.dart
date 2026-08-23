@@ -71,6 +71,8 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                           _MapAnimals(
                             dogLabel: l10n.dog,
                             sheepLabel: l10n.sheep,
+                            roosterLabel: l10n.rooster,
+                            horseLabel: l10n.horse,
                             tapHint: l10n.tapToHearAnimal,
                             onAnimalPressed: _playAnimalSound,
                           ),
@@ -99,15 +101,11 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                               left: constraints.maxWidth * .38,
                               child: const _TreasureChest(),
                             ),
-                          AnimatedPositioned(
+                          _SlidingMapMascot(
                             key: const ValueKey('map-mascot'),
-                            duration: const Duration(milliseconds: 900),
-                            curve: Curves.easeInOutCubic,
-                            top: 48 + (_selectedLevel! - 1) * 135,
-                            left: (_selectedLevel! - 1).isEven
-                                ? constraints.maxWidth * .17 + 80
-                                : constraints.maxWidth * .57 - 62,
-                            child: _MapMascot(emoji: mascot.emoji),
+                            selectedLevel: _selectedLevel!,
+                            mapWidth: constraints.maxWidth,
+                            emoji: mascot.emoji,
                           ),
                         ],
                       ),
@@ -195,12 +193,16 @@ class _MapAnimals extends StatelessWidget {
   const _MapAnimals({
     required this.dogLabel,
     required this.sheepLabel,
+    required this.roosterLabel,
+    required this.horseLabel,
     required this.tapHint,
     required this.onAnimalPressed,
   });
 
   final String dogLabel;
   final String sheepLabel;
+  final String roosterLabel;
+  final String horseLabel;
   final String tapHint;
   final ValueChanged<String> onAnimalPressed;
 
@@ -214,7 +216,7 @@ class _MapAnimals extends StatelessWidget {
             left: constraints.maxWidth * .03,
             child: _SoundAnimal(
               key: const ValueKey('map-animal-dog'),
-              emoji: '🐶',
+              asset: 'assets/images/animals/dog.png',
               label: dogLabel,
               tapHint: tapHint,
               onPressed: () => onAnimalPressed('sounds/animals/dog.mp3'),
@@ -225,10 +227,32 @@ class _MapAnimals extends StatelessWidget {
             right: constraints.maxWidth * .03,
             child: _SoundAnimal(
               key: const ValueKey('map-animal-sheep'),
-              emoji: '🐑',
+              asset: 'assets/images/animals/sheep.png',
               label: sheepLabel,
               tapHint: tapHint,
               onPressed: () => onAnimalPressed('sounds/animals/sheep.mp3'),
+            ),
+          ),
+          Positioned(
+            top: 1110,
+            left: constraints.maxWidth * .03,
+            child: _SoundAnimal(
+              key: const ValueKey('map-animal-rooster'),
+              asset: 'assets/images/animals/rooster.png',
+              label: roosterLabel,
+              tapHint: tapHint,
+              onPressed: () => onAnimalPressed('sounds/animals/rooster.mp3'),
+            ),
+          ),
+          Positioned(
+            top: 1430,
+            right: constraints.maxWidth * .03,
+            child: _SoundAnimal(
+              key: const ValueKey('map-animal-horse'),
+              asset: 'assets/images/animals/horse.png',
+              label: horseLabel,
+              tapHint: tapHint,
+              onPressed: () => onAnimalPressed('sounds/animals/horse.mp3'),
             ),
           ),
         ],
@@ -239,14 +263,14 @@ class _MapAnimals extends StatelessWidget {
 
 class _SoundAnimal extends StatefulWidget {
   const _SoundAnimal({
-    required this.emoji,
+    required this.asset,
     required this.label,
     required this.tapHint,
     required this.onPressed,
     super.key,
   });
 
-  final String emoji;
+  final String asset;
   final String label;
   final String tapHint;
   final VoidCallback onPressed;
@@ -285,12 +309,52 @@ class _SoundAnimalState extends State<_SoundAnimal> {
             child: AnimatedRotation(
               turns: _reacting ? .04 : 0,
               duration: const Duration(milliseconds: 220),
-              child: Text(widget.emoji, style: const TextStyle(fontSize: 44)),
+              child: Image.asset(
+                widget.asset,
+                width: 64,
+                height: 64,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.medium,
+              ),
             ),
           ),
         ),
       ),
     ),
+  );
+}
+
+class _SlidingMapMascot extends StatelessWidget {
+  const _SlidingMapMascot({
+    required this.selectedLevel,
+    required this.mapWidth,
+    required this.emoji,
+    super.key,
+  });
+
+  final int selectedLevel;
+  final double mapWidth;
+  final String emoji;
+
+  double _leftForIndex(int index) =>
+      index.isEven ? mapWidth * .17 + 80 : mapWidth * .57 - 62;
+
+  @override
+  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+    tween: Tween<double>(end: (selectedLevel - 1).toDouble()),
+    duration: const Duration(milliseconds: 1200),
+    curve: Curves.easeInOutSine,
+    builder: (context, position, child) {
+      final lowerIndex = position.floor();
+      final upperIndex = position.ceil();
+      final segmentProgress = position - lowerIndex;
+      final left =
+          _leftForIndex(lowerIndex) +
+          (_leftForIndex(upperIndex) - _leftForIndex(lowerIndex)) *
+              segmentProgress;
+      return Positioned(top: 48 + position * 135, left: left, child: child!);
+    },
+    child: _MapMascot(emoji: emoji),
   );
 }
 

@@ -118,6 +118,8 @@ void main() {
     expect(find.byKey(const ValueKey('map-mascot')), findsOneWidget);
     expect(find.byKey(const ValueKey('map-animal-dog')), findsOneWidget);
     expect(find.byKey(const ValueKey('map-animal-sheep')), findsOneWidget);
+    expect(find.byKey(const ValueKey('map-animal-rooster')), findsOneWidget);
+    expect(find.byKey(const ValueKey('map-animal-horse')), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('map-animal-dog')));
     await tester.pump(const Duration(milliseconds: 200));
