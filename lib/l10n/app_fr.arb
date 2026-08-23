@@ -2,6 +2,8 @@
   "@@locale": "fr",
   "dog": "Chien",
   "sheep": "Mouton",
+  "rooster": "Coq",
+  "horse": "Cheval",
   "tapToHearAnimal": "Touche pour écouter son cri",
   "resetData": "Réinitialiser les données",
   "resetDataDescription": "Efface la mascotte, la langue, les niveaux débloqués et les exercices inachevés.",

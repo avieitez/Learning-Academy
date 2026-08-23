@@ -15,6 +15,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sheep => 'Oveja';
 
   @override
+  String get rooster => 'Gallo';
+
+  @override
+  String get horse => 'Caballo';
+
+  @override
   String get tapToHearAnimal => 'Toca para escuchar su sonido';
 
   @override

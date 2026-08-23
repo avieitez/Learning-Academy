@@ -25,5 +25,6 @@ flutter:
   generate: true
   assets:
     - assets/images/common/
+    - assets/images/animals/
     - assets/sounds/common/
     - assets/sounds/animals/

@@ -15,6 +15,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sheep => 'Mouton';
 
   @override
+  String get rooster => 'Coq';
+
+  @override
+  String get horse => 'Cheval';
+
+  @override
   String get tapToHearAnimal => 'Touche pour écouter son cri';
 
   @override
