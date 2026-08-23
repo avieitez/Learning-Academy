@@ -176,8 +176,12 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
   };
 
   void _playSelectedLevel(BuildContext context, AppLocalizations l10n) {
-    if (widget.operation == MathOperation.addition && _selectedLevel == 1) {
-      Navigator.pushNamed(context, AppRoutes.mathematicsExercise);
+    if (widget.operation == MathOperation.addition && _selectedLevel! <= 3) {
+      Navigator.pushNamed(
+        context,
+        AppRoutes.mathematicsExercise,
+        arguments: _selectedLevel,
+      );
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(

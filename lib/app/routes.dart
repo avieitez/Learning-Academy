@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../features/home/presentation/home_screen.dart';
 import '../features/mathematics/domain/math_operation.dart';
-import '../features/mathematics/presentation/addition_level_one_screen.dart';
+import '../features/mathematics/presentation/addition_exercise_screen.dart';
 import '../features/mathematics/presentation/level_map_screen.dart';
 import '../features/mathematics/presentation/operation_selection_screen.dart';
 import '../features/shared/presentation/feature_placeholder_screen.dart';
@@ -48,9 +48,10 @@ abstract final class AppRoutes {
       );
     }
     if (settings.name == mathematicsExercise) {
+      final level = settings.arguments is int ? settings.arguments! as int : 1;
       return MaterialPageRoute<void>(
         settings: settings,
-        builder: (_) => const AdditionLevelOneScreen(),
+        builder: (_) => AdditionExerciseScreen(level: level),
       );
     }
 

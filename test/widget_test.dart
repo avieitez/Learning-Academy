@@ -90,6 +90,38 @@ void main() {
     );
   });
 
+  testWidgets('first mascot selection starts its celebration immediately', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const LearningAcademyApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('settings-button')));
+    await tester.pumpAndSettle();
+
+    final foxCard = find.byKey(const ValueKey('mascot-fox'));
+    await tester.ensureVisible(foxCard);
+    await tester.tap(foxCard);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 250));
+
+    final jump = find.descendant(
+      of: foxCard,
+      matching: find.byKey(const ValueKey('mascot-jump-transform')),
+    );
+    expect(tester.widget<Transform>(jump).transform.entry(1, 3), lessThan(-1));
+    expect(
+      tester
+          .widget<Semantics>(
+            find
+                .descendant(of: foxCard, matching: find.byType(Semantics))
+                .first,
+          )
+          .properties
+          .selected,
+      isTrue,
+    );
+  });
+
   testWidgets('addition opens a twelve-level map', (tester) async {
     await tester.pumpWidget(const LearningAcademyApp());
     await tester.pumpAndSettle();

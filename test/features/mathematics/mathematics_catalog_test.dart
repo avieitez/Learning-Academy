@@ -27,4 +27,26 @@ void main() {
       expect(exercise.correctAnswer, lessThanOrEqualTo(8));
     }
   });
+
+  test('addition levels two and three progress gradually', () {
+    final levelTwo = AdditionExerciseGenerator.levelTwo();
+    final levelThree = AdditionExerciseGenerator.levelThree();
+
+    expect(levelTwo, hasLength(10));
+    expect(levelThree, hasLength(10));
+    expect(
+      levelTwo.map((exercise) => exercise.correctAnswer),
+      everyElement(inInclusiveRange(7, 12)),
+    );
+    expect(
+      levelThree.map((exercise) => exercise.correctAnswer),
+      everyElement(inInclusiveRange(12, 20)),
+    );
+
+    for (final exercise in [...levelTwo, ...levelThree]) {
+      expect(exercise.answers, hasLength(3));
+      expect(exercise.answers.toSet(), hasLength(3));
+      expect(exercise.answers, contains(exercise.correctAnswer));
+    }
+  });
 }

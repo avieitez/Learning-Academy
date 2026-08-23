@@ -265,10 +265,11 @@ class _MascotOptionState extends State<_MascotOption>
 
   Future<void> _selectMascot() async {
     if (_controller.isAnimating) return;
+    widget.onPressed();
+    _controller.stop();
     setState(() => _celebrating = true);
     await _controller.forward(from: 0);
     if (!mounted) return;
-    widget.onPressed();
     setState(() => _celebrating = false);
   }
 

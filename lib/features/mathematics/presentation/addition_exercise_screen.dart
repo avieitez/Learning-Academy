@@ -11,16 +11,18 @@ import '../../../settings/domain/app_preferences.dart';
 import '../data/generators/addition_exercise_generator.dart';
 import '../domain/addition_exercise.dart';
 
-class AdditionLevelOneScreen extends StatefulWidget {
-  const AdditionLevelOneScreen({this.audioService, super.key});
+class AdditionExerciseScreen extends StatefulWidget {
+  const AdditionExerciseScreen({this.level = 1, this.audioService, super.key})
+    : assert(level >= 1 && level <= 3);
 
+  final int level;
   final AudioService? audioService;
 
   @override
-  State<AdditionLevelOneScreen> createState() => _AdditionLevelOneScreenState();
+  State<AdditionExerciseScreen> createState() => _AdditionExerciseScreenState();
 }
 
-class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
+class _AdditionExerciseScreenState extends State<AdditionExerciseScreen> {
   late final List<AdditionExercise> _exercises;
   int _exerciseIndex = 0;
   int _correctAnswers = 0;
@@ -39,7 +41,7 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
   @override
   void initState() {
     super.initState();
-    _exercises = AdditionExerciseGenerator.levelOne();
+    _exercises = AdditionExerciseGenerator.forLevel(widget.level);
     _ownsAudioService = widget.audioService == null;
     _audioService = widget.audioService ?? AudioFeedbackService();
   }
@@ -51,7 +53,7 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
     _sessionChecked = true;
     final session = AppPreferencesScope.of(
       context,
-    ).value.session('mathematics', 'addition', 1);
+    ).value.session('mathematics', 'addition', widget.level);
     if (session != null && session.exerciseIndex < _exercises.length) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => _offerResume(session),
@@ -87,7 +89,7 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
             child: Column(
               children: [
                 _ExerciseHeader(
-                  title: l10n.additionLevelOne,
+                  title: '${l10n.addition} · ${l10n.level} ${widget.level}',
                   current: _exerciseIndex + 1,
                   total: _exercises.length,
                   onClose: _exitLevel,
@@ -185,9 +187,11 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
     await Future<void>.delayed(const Duration(milliseconds: 1600));
     if (!mounted) return;
     if (_exerciseIndex == _exercises.length - 1) {
-      await AppPreferencesScope.of(
-        context,
-      ).clearSession(area: 'mathematics', activity: 'addition', level: 1);
+      await AppPreferencesScope.of(context).clearSession(
+        area: 'mathematics',
+        activity: 'addition',
+        level: widget.level,
+      );
       unawaited(_audioService.playLevelComplete());
       await _showResults();
       return;
@@ -242,9 +246,11 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
         _startedAt = session.startedAt;
       });
     } else {
-      await AppPreferencesScope.of(
-        context,
-      ).clearSession(area: 'mathematics', activity: 'addition', level: 1);
+      await AppPreferencesScope.of(context).clearSession(
+        area: 'mathematics',
+        activity: 'addition',
+        level: widget.level,
+      );
     }
   }
 
@@ -253,7 +259,7 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
         ExerciseSession(
           area: 'mathematics',
           activity: 'addition',
-          level: 1,
+          level: widget.level,
           exerciseIndex: exerciseIndex ?? _exerciseIndex,
           correctAnswers: _correctAnswers,
           incorrectAnswers: _incorrectAnswers,
@@ -272,9 +278,11 @@ class _AdditionLevelOneScreenState extends State<AdditionLevelOneScreen> {
     final l10n = AppLocalizations.of(context);
     final passed = _correctAnswers >= 7;
     if (passed) {
-      await AppPreferencesScope.of(
-        context,
-      ).unlockLevel(area: 'mathematics', activity: 'addition', level: 2);
+      await AppPreferencesScope.of(context).unlockLevel(
+        area: 'mathematics',
+        activity: 'addition',
+        level: widget.level + 1,
+      );
     }
     if (!mounted) return;
     await showDialog<void>(
