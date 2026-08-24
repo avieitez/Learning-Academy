@@ -49,4 +49,35 @@ void main() {
       expect(exercise.answers, contains(exercise.correctAnswer));
     }
   });
+
+  test('all twelve addition levels contain ten valid exercises', () {
+    for (var level = 1; level <= MathematicsCatalog.levelCount; level++) {
+      final exercises = AdditionExerciseGenerator.forLevel(level);
+      expect(exercises, hasLength(10), reason: 'level $level');
+      for (final exercise in exercises) {
+        expect(exercise.answers, hasLength(3), reason: 'level $level');
+        expect(exercise.answers.toSet(), hasLength(3), reason: 'level $level');
+        expect(
+          exercise.answers,
+          contains(exercise.correctAnswer),
+          reason: 'level $level: ${exercise.left} + ${exercise.right}',
+        );
+        expect(
+          exercise.correctAnswer,
+          inInclusiveRange(1, 100),
+          reason: 'level $level',
+        );
+      }
+    }
+  });
+
+  test('advanced levels introduce place value and regrouping', () {
+    expect(
+      AdditionExerciseGenerator.forLevel(
+        9,
+      ).map((exercise) => exercise.correctAnswer),
+      everyElement(predicate<int>((answer) => answer % 10 == 0)),
+    );
+    expect(AdditionExerciseGenerator.forLevel(12).last.correctAnswer, 100);
+  });
 }

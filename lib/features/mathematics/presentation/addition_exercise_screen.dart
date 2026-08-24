@@ -13,7 +13,7 @@ import '../domain/addition_exercise.dart';
 
 class AdditionExerciseScreen extends StatefulWidget {
   const AdditionExerciseScreen({this.level = 1, this.audioService, super.key})
-    : assert(level >= 1 && level <= 3);
+    : assert(level >= 1 && level <= 12);
 
   final int level;
   final AudioService? audioService;
@@ -107,7 +107,10 @@ class _AdditionExerciseScreenState extends State<AdditionExerciseScreen> {
                           ).textTheme.headlineLarge?.copyWith(fontSize: 26),
                         ),
                         const SizedBox(height: 18),
-                        _VisualAddition(exercise: _exercise),
+                        _VisualAddition(
+                          exercise: _exercise,
+                          showObjects: widget.level <= 3,
+                        ),
                         const SizedBox(height: 18),
                         Text(
                           '${_exercise.left} + ${_exercise.right} = ?',
@@ -277,7 +280,7 @@ class _AdditionExerciseScreenState extends State<AdditionExerciseScreen> {
   Future<void> _showResults() async {
     final l10n = AppLocalizations.of(context);
     final passed = _correctAnswers >= 7;
-    if (passed) {
+    if (passed && widget.level < 12) {
       await AppPreferencesScope.of(context).unlockLevel(
         area: 'mathematics',
         activity: 'addition',
@@ -378,8 +381,9 @@ class _ExerciseHeader extends StatelessWidget {
 }
 
 class _VisualAddition extends StatelessWidget {
-  const _VisualAddition({required this.exercise});
+  const _VisualAddition({required this.exercise, required this.showObjects});
   final AdditionExercise exercise;
+  final bool showObjects;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -397,7 +401,11 @@ class _VisualAddition extends StatelessWidget {
     ),
     child: Row(
       children: [
-        Expanded(child: _ObjectGroup(count: exercise.left)),
+        Expanded(
+          child: showObjects
+              ? _ObjectGroup(count: exercise.left)
+              : _PlaceValueGroup(value: exercise.left),
+        ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: Text(
@@ -409,10 +417,69 @@ class _VisualAddition extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(child: _ObjectGroup(count: exercise.right)),
+        Expanded(
+          child: showObjects
+              ? _ObjectGroup(count: exercise.right)
+              : _PlaceValueGroup(value: exercise.right),
+        ),
       ],
     ),
   );
+}
+
+class _PlaceValueGroup extends StatelessWidget {
+  const _PlaceValueGroup({required this.value});
+
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    final tens = value ~/ 10;
+    final units = value % 10;
+    return Semantics(
+      label: '$value',
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$value',
+            style: const TextStyle(
+              color: AppColors.ink,
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 3,
+            runSpacing: 3,
+            children: [
+              for (var index = 0; index < tens; index++)
+                Container(
+                  width: 10,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: AppColors.orange,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: const Color(0xFFD86B08)),
+                  ),
+                ),
+              for (var index = 0; index < units; index++)
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: const BoxDecoration(
+                    color: AppColors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _ObjectGroup extends StatelessWidget {

@@ -176,7 +176,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
   };
 
   void _playSelectedLevel(BuildContext context, AppLocalizations l10n) {
-    if (widget.operation == MathOperation.addition && _selectedLevel! <= 3) {
+    if (widget.operation == MathOperation.addition) {
       Navigator.pushNamed(
         context,
         AppRoutes.mathematicsExercise,

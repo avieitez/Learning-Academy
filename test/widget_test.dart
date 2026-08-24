@@ -202,4 +202,40 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('Acerca de Learning Academy'), findsOneWidget);
   });
+
+  testWidgets('addition level twelve renders its place-value exercise', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'progress.unlocked_levels': '{"mathematics/addition":12}',
+    });
+    await tester.pumpWidget(const LearningAcademyApp());
+    await tester.pumpAndSettle();
+
+    final mathCard = find.byKey(const ValueKey('mathematics-card'));
+    await tester.scrollUntilVisible(
+      mathCard,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(mathCard);
+    await tester.pumpAndSettle();
+    final addition = find.byKey(const ValueKey('addition-operation'));
+    await tester.scrollUntilVisible(
+      addition,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(addition);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('play-level')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Addition · Level 12'), findsOneWidget);
+    expect(find.text('18 + 19 = ?'), findsOneWidget);
+    expect(find.byKey(const ValueKey('addition-question')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
