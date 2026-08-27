@@ -396,46 +396,80 @@ class _VisualAddition extends StatelessWidget {
   final String fruit;
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(28),
-      boxShadow: const [
-        BoxShadow(
-          color: Color(0x220C5D82),
-          blurRadius: 16,
-          offset: Offset(0, 7),
-        ),
-      ],
-    ),
-    child: Row(
-      key: ValueKey('exercise-fruit-$fruit'),
-      children: [
-        Expanded(
-          child: showObjects
-              ? _ObjectGroup(count: exercise.left, fruit: fruit)
-              : _PlaceValueGroup(value: exercise.left, fruit: fruit),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-          child: Text(
-            '+',
-            style: TextStyle(
-              color: AppColors.orange,
-              fontSize: 42,
-              fontWeight: FontWeight.w900,
-            ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x220C5D82),
+            blurRadius: 16,
+            offset: Offset(0, 7),
           ),
-        ),
-        Expanded(
-          child: showObjects
-              ? _ObjectGroup(count: exercise.right, fruit: fruit)
-              : _PlaceValueGroup(value: exercise.right, fruit: fruit),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+      child: Column(
+        key: ValueKey('exercise-fruit-$fruit'),
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (!showObjects) ...[
+            Semantics(
+              label: l10n.eachBasketHasTen,
+              child: ExcludeSemantics(
+                child: Row(
+                  key: const ValueKey('ten-basket-legend'),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _TenFruitBasket(fruit: fruit),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        l10n.eachBasketHasTen,
+                        style: const TextStyle(
+                          color: AppColors.ink,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Divider(height: 18),
+          ],
+          Row(
+            children: [
+              Expanded(
+                child: showObjects
+                    ? _ObjectGroup(count: exercise.left, fruit: fruit)
+                    : _PlaceValueGroup(value: exercise.left, fruit: fruit),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Text(
+                  '+',
+                  style: TextStyle(
+                    color: AppColors.orange,
+                    fontSize: 42,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: showObjects
+                    ? _ObjectGroup(count: exercise.right, fruit: fruit)
+                    : _PlaceValueGroup(value: exercise.right, fruit: fruit),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _PlaceValueGroup extends StatelessWidget {
@@ -470,15 +504,7 @@ class _PlaceValueGroup extends StatelessWidget {
               runSpacing: 3,
               children: [
                 for (var index = 0; index < tens; index++)
-                  Container(
-                    width: 10,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: AppColors.orange,
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: const Color(0xFFD86B08)),
-                    ),
-                  ),
+                  _TenFruitBasket(fruit: fruit),
                 for (var index = 0; index < units; index++)
                   Text(fruit, style: const TextStyle(fontSize: 18)),
               ],
@@ -488,6 +514,58 @@ class _PlaceValueGroup extends StatelessWidget {
       ),
     );
   }
+}
+
+class _TenFruitBasket extends StatelessWidget {
+  const _TenFruitBasket({required this.fruit});
+
+  final String fruit;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    key: const ValueKey('ten-fruit-basket'),
+    width: 44,
+    height: 48,
+    child: Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Positioned(
+          top: 0,
+          child: Text(fruit, style: const TextStyle(fontSize: 20)),
+        ),
+        const Positioned(
+          bottom: 0,
+          child: Text('🧺', style: TextStyle(fontSize: 32)),
+        ),
+        Positioned(
+          right: 0,
+          top: 18,
+          child: Container(
+            width: 22,
+            height: 22,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFD84A),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: const [
+                BoxShadow(color: Color(0x33000000), blurRadius: 3),
+              ],
+            ),
+            child: const Text(
+              '10',
+              style: TextStyle(
+                color: AppColors.ink,
+                fontSize: 10,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _ObjectGroup extends StatelessWidget {

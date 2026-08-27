@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get eachBasketHasTen => 'Each basket has 10 fruits';
+
+  @override
   String get dog => 'Dog';
 
   @override

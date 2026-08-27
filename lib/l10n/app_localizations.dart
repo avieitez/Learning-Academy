@@ -100,6 +100,12 @@ abstract class AppLocalizations {
     Locale('fr'),
   ];
 
+  /// No description provided for @eachBasketHasTen.
+  ///
+  /// In en, this message translates to:
+  /// **'Each basket has 10 fruits'**
+  String get eachBasketHasTen;
+
   /// No description provided for @dog.
   ///
   /// In en, this message translates to:

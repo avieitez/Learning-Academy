@@ -1,5 +1,6 @@
 {
   "@@locale": "fr",
+  "eachBasketHasTen": "Chaque panier contient 10 fruits",
   "dog": "Chien",
   "sheep": "Mouton",
   "rooster": "Coq",

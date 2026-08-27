@@ -238,6 +238,9 @@ void main() {
     expect(find.text('Addition · Level 12'), findsOneWidget);
     expect(find.text('18 + 19 = ?'), findsOneWidget);
     expect(find.byKey(const ValueKey('addition-question')), findsOneWidget);
+    expect(find.byKey(const ValueKey('ten-basket-legend')), findsOneWidget);
+    expect(find.byKey(const ValueKey('ten-fruit-basket')), findsWidgets);
+    expect(find.text('Each basket has 10 fruits'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
