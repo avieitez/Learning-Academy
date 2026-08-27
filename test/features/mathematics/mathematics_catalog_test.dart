@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:learning_academy/features/mathematics/data/mathematics_catalog.dart';
+import 'package:learning_academy/features/mathematics/data/addition_visual_catalog.dart';
 import 'package:learning_academy/features/mathematics/domain/math_level.dart';
 import 'package:learning_academy/features/mathematics/data/generators/addition_exercise_generator.dart';
 
@@ -79,5 +80,16 @@ void main() {
       everyElement(predicate<int>((answer) => answer % 10 == 0)),
     );
     expect(AdditionExerciseGenerator.forLevel(12).last.correctAnswer, 100);
+  });
+
+  test('every exercise in a level uses a different vivid fruit', () {
+    for (var level = 1; level <= MathematicsCatalog.levelCount; level++) {
+      final fruits = List.generate(
+        10,
+        (index) =>
+            AdditionVisualCatalog.fruitFor(level: level, exerciseIndex: index),
+      );
+      expect(fruits.toSet(), hasLength(10), reason: 'level $level');
+    }
   });
 }

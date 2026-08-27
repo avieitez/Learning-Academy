@@ -8,6 +8,7 @@ import '../../../core/audio/audio_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../progress/domain/exercise_session.dart';
 import '../../../settings/domain/app_preferences.dart';
+import '../data/addition_visual_catalog.dart';
 import '../data/generators/addition_exercise_generator.dart';
 import '../domain/addition_exercise.dart';
 
@@ -110,6 +111,10 @@ class _AdditionExerciseScreenState extends State<AdditionExerciseScreen> {
                         _VisualAddition(
                           exercise: _exercise,
                           showObjects: widget.level <= 3,
+                          fruit: AdditionVisualCatalog.fruitFor(
+                            level: widget.level,
+                            exerciseIndex: _exerciseIndex,
+                          ),
                         ),
                         const SizedBox(height: 18),
                         Text(
@@ -381,9 +386,14 @@ class _ExerciseHeader extends StatelessWidget {
 }
 
 class _VisualAddition extends StatelessWidget {
-  const _VisualAddition({required this.exercise, required this.showObjects});
+  const _VisualAddition({
+    required this.exercise,
+    required this.showObjects,
+    required this.fruit,
+  });
   final AdditionExercise exercise;
   final bool showObjects;
+  final String fruit;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -400,11 +410,12 @@ class _VisualAddition extends StatelessWidget {
       ],
     ),
     child: Row(
+      key: ValueKey('exercise-fruit-$fruit'),
       children: [
         Expanded(
           child: showObjects
-              ? _ObjectGroup(count: exercise.left)
-              : _PlaceValueGroup(value: exercise.left),
+              ? _ObjectGroup(count: exercise.left, fruit: fruit)
+              : _PlaceValueGroup(value: exercise.left, fruit: fruit),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
@@ -419,8 +430,8 @@ class _VisualAddition extends StatelessWidget {
         ),
         Expanded(
           child: showObjects
-              ? _ObjectGroup(count: exercise.right)
-              : _PlaceValueGroup(value: exercise.right),
+              ? _ObjectGroup(count: exercise.right, fruit: fruit)
+              : _PlaceValueGroup(value: exercise.right, fruit: fruit),
         ),
       ],
     ),
@@ -428,9 +439,10 @@ class _VisualAddition extends StatelessWidget {
 }
 
 class _PlaceValueGroup extends StatelessWidget {
-  const _PlaceValueGroup({required this.value});
+  const _PlaceValueGroup({required this.value, required this.fruit});
 
   final int value;
+  final String fruit;
 
   @override
   Widget build(BuildContext context) {
@@ -450,31 +462,27 @@ class _PlaceValueGroup extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 3,
-            runSpacing: 3,
-            children: [
-              for (var index = 0; index < tens; index++)
-                Container(
-                  width: 10,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: AppColors.orange,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: const Color(0xFFD86B08)),
+          ExcludeSemantics(
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 3,
+              runSpacing: 3,
+              children: [
+                for (var index = 0; index < tens; index++)
+                  Container(
+                    width: 10,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: const Color(0xFFD86B08)),
+                    ),
                   ),
-                ),
-              for (var index = 0; index < units; index++)
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: const BoxDecoration(
-                    color: AppColors.blue,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-            ],
+                for (var index = 0; index < units; index++)
+                  Text(fruit, style: const TextStyle(fontSize: 18)),
+              ],
+            ),
           ),
         ],
       ),
@@ -483,16 +491,22 @@ class _PlaceValueGroup extends StatelessWidget {
 }
 
 class _ObjectGroup extends StatelessWidget {
-  const _ObjectGroup({required this.count});
+  const _ObjectGroup({required this.count, required this.fruit});
   final int count;
+  final String fruit;
   @override
-  Widget build(BuildContext context) => Wrap(
-    alignment: WrapAlignment.center,
-    spacing: 2,
-    runSpacing: 2,
-    children: List.generate(
-      count,
-      (index) => const Text('🍎', style: TextStyle(fontSize: 34)),
+  Widget build(BuildContext context) => Semantics(
+    label: '$count',
+    child: ExcludeSemantics(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 2,
+        runSpacing: 2,
+        children: List.generate(
+          count,
+          (index) => Text(fruit, style: const TextStyle(fontSize: 34)),
+        ),
+      ),
     ),
   );
 }
